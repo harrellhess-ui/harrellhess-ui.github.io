@@ -1,0 +1,6 @@
+# 不需要上传到网页的文件
+.DS_Store
+Thumbs.db
+*.pfx
+node_modules/
+.claude/
