@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>李忠翔 — 个人主页</title>
+<title>李忠翔 — 个人成长</title>
 <style>
   :root {
     --navy: #0f1923;
@@ -277,6 +277,25 @@
   .trait-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
   .trait-label { font-size: 0.88rem; font-weight: 600; color: var(--text); }
 
+  /* ===== Growth highlight ===== */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(201,164,82,0.06) 0%, rgba(201,164,82,0.02) 100%);
+    border-left: 3px solid var(--gold); border-radius: 0 12px 12px 0;
+    padding: 1.2rem 1.6rem; margin-top: 1.2rem;
+  }
+  .highlight-box p { color: var(--text-light); font-size: 0.93rem; margin-bottom: 0.3rem; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+  .growth-quote {
+    text-align: center; padding: 2.5rem 1rem; font-size: 1.05rem;
+    color: var(--gold); font-weight: 500; font-style: italic; letter-spacing: 1px;
+    position: relative;
+  }
+  .growth-quote::before {
+    content: '"'; font-size: 3rem; color: rgba(201,164,82,0.25);
+    position: absolute; top: -0.5rem; left: 50%; transform: translateX(-50%);
+    font-style: normal; line-height: 1;
+  }
+
   /* ===== Love section ===== */
   .love-heart {
     display: flex; align-items: center; justify-content: center;
@@ -338,6 +357,64 @@
     .trait { padding: 1rem 0.6rem; }
     .card { padding: 1.2rem; }
   }
+
+  /* ===== Editor Toolbar ===== */
+  .editor-toolbar {
+    position: fixed; bottom: 24px; right: 24px; z-index: 999;
+    display: flex; flex-direction: column; align-items: flex-end;
+    gap: 8px;
+  }
+  .editor-toggle {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--navy); color: var(--gold); border: 1px solid rgba(201,164,82,0.3);
+    cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-lg); transition: all 0.3s;
+  }
+  .editor-toggle:hover { background: #1a3348; transform: scale(1.06); }
+  .editor-toggle.active { background: var(--gold); color: var(--navy); }
+  .editor-panel {
+    display: none; flex-direction: column; gap: 6px;
+    background: var(--white); border-radius: 12px; padding: 10px;
+    box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  }
+  .editor-panel.show { display: flex; }
+  .editor-panel button {
+    border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    font-size: 0.82rem; font-weight: 500; transition: all 0.2s;
+    font-family: var(--font); white-space: nowrap;
+  }
+  .editor-btn-save { background: #eaf6ee; color: #1a7540; }
+  .editor-btn-save:hover { background: #d0edda; }
+  .editor-btn-export { background: #ecf2fc; color: #2956c4; }
+  .editor-btn-export:hover { background: #d8e4fa; }
+  .editor-btn-reset { background: #fef0f0; color: #c42e2e; }
+  .editor-btn-reset:hover { background: #fce0e0; }
+  .editable-hint {
+    position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 999;
+    background: var(--navy); color: var(--gold); padding: 8px 20px; border-radius: 20px;
+    font-size: 0.82rem; font-weight: 500; box-shadow: var(--shadow-lg);
+    display: none; pointer-events: none; white-space: nowrap;
+  }
+  .editable-hint.show { display: block; animation: fadeInOut 2.5s ease forwards; }
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    75% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  [contenteditable="true"] {
+    outline: 2px dashed rgba(201,164,82,0.4); outline-offset: 4px; border-radius: 6px;
+    transition: outline 0.2s; cursor: text;
+  }
+  [contenteditable="true"]:hover { outline-color: rgba(201,164,82,0.7); }
+  [contenteditable="true"]:focus { outline: 2px solid var(--gold); background: rgba(201,164,82,0.03); }
+  .editor-toast {
+    position: fixed; bottom: 80px; right: 80px; z-index: 1000;
+    background: var(--navy); color: #fff; padding: 10px 20px; border-radius: 10px;
+    font-size: 0.84rem; box-shadow: var(--shadow-lg); pointer-events: none;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .editor-toast.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -345,15 +422,15 @@
 <!-- Navigation -->
 <nav class="nav" id="navbar">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">李忠翔</a>
+    <a href="#" class="nav-logo">李忠翔 · 个人成长</a>
     <button class="nav-toggle" id="navToggle" aria-label="菜单">
       <span></span><span></span><span></span>
     </button>
     <div class="nav-links" id="navMenu">
       <a href="#about">关于</a>
-      <a href="#research">科研竞赛</a>
-      <a href="#practice">实践服务</a>
       <a href="#work">学生工作</a>
+      <a href="#volunteer">志愿服务</a>
+      <a href="#practice">社会实践</a>
       <a href="#love">爱情</a>
       <a href="#thoughts">思考</a>
     </div>
@@ -370,34 +447,37 @@
     <p class="en-name">LI ZHONGXIANG</p>
     <p class="tagline">
       四川大学 · 电气工程学院 · 2024 级本科生<br>
-      以学术为基，以实践为本，以服务为志
+      在行动中成长，在服务中扎根，在爱与被爱中完整
     </p>
     <div class="hero-badges">
-      <span class="hero-badge">电气工程</span>
-      <span class="hero-badge">双碳研究</span>
-      <span class="hero-badge">学生骨干</span>
-      <span class="hero-badge">公益实践</span>
+      <span class="hero-badge">学生工作</span>
+      <span class="hero-badge">志愿服务</span>
+      <span class="hero-badge">社会实践</span>
+      <span class="hero-badge">爱情成长</span>
+      <span class="hero-badge">个人思考</span>
     </div>
   </div>
-  <div class="scroll-hint">向下了解我</div>
+  <div class="scroll-hint">向下了解我的成长故事</div>
 </section>
 
 <!-- About -->
 <section id="about" class="section reveal">
   <div class="section-inner">
-    <p class="section-tag">About</p>
-    <h2 class="section-title">关于我</h2>
+    <p class="section-tag">About Me</p>
+    <h2 class="section-title">成长之路</h2>
     <div class="about-grid">
       <div class="about-text">
         <p>
-          四川大学电气工程学院 2024 级本科生，主修电气工程及其自动化。
-          高度自律，多线并行——在繁重的专业课程之外，同时推进国家级大创科研项目、
-          西门子杯学科竞赛、学生组织工作与公益实践，力求在每一个赛道上做到最好。
+          四川大学电气工程学院 2024 级本科生。从踏入大学校门的那一刻起，就带着一种执念——
+          不只做功课好的学生，更要做有温度、有担当的人。
         </p>
         <p>
-          科研聚焦于"双碳"目标下的电力系统优化调度，学生工作扎根于阳光资助宣传。
-          支教、社会实践、公益服务——在技术之外，始终保有一份对他者的关怀。
-          愿做一个有温度、有担当的电气人。
+          学生工作让我学会服务他人，志愿服务让我看见真实的中国，
+          社会实践让我走出象牙塔，爱情让我成为一个更完整的人。
+          科研与竞赛是专业能力的训练场，但真正的成长，发生在人与人的连接中。
+        </p>
+        <p>
+          每一段经历都是成长路上的坐标点——不追求完美履历，只愿每一步都踏实有痕。
         </p>
       </div>
       <div class="info-list">
@@ -431,63 +511,166 @@
   </div>
 </section>
 
-<!-- Research & Competition -->
-<section id="research" class="section section-alt reveal">
+<!-- Student Work -->
+<section id="work" class="section section-alt reveal">
   <div class="section-inner">
-    <p class="section-tag">Research &amp; Competition</p>
-    <h2 class="section-title">科研与竞赛</h2>
+    <p class="section-tag">Student Work</p>
+    <h2 class="section-title">学生工作</h2>
+
     <div class="cards">
       <div class="card">
         <div class="card-header">
-          <div class="card-icon">🔥</div>
+          <div class="card-icon">☀️</div>
           <div>
-            <div class="card-title">2025 大学生创新训练计划</div>
-            <div class="card-subtitle">2025.11 — 至今</div>
+            <div class="card-title">阳光资助宣传员（阳宣）负责人</div>
+            <div class="card-subtitle">2024 年加入，2025 夏至今任负责人</div>
           </div>
         </div>
         <div class="card-body">
-          <p><strong>课题：</strong>"双碳"目标下计及火电-熔盐储热耦合系统优化调度与灵活性提升研究</p>
-          <p><strong>灵活性方向：</strong>火电-熔盐储热耦合系统建模，灵活性供需匹配仿真分析，flex vs noflex 对比评估</p>
-          <p><strong>碳经济性方向：</strong>碳排放权配额交易建模，碳经济性优化调度，基于全国碳排放权交易配额方案的实证研究</p>
+          <p>2024 年入学即加入阳光资助宣传员队伍，2025 年夏竞选成为负责人。对接人资与二组，承担干部例会月度记录、薪酬评议与工资公示、建议反馈收集整理等日常职能。</p>
+          <p>上任后首件大事即是组织负责秋季绿色通道活动——从曾经的受益者转变为组织者，用亲身经历帮助经济困难新生。此后陆续负责阳宣知识竞答、招新与培训会等活动的策划执行。</p>
+          <p>从大一时的懵懂新人，到如今独当一面——学会的不只是如何组织一场活动，更是如何在繁琐的事务中保持耐心、如何在团队中协调不同声音。</p>
         </div>
         <div class="tags">
-          <span class="tag tag-warm">MATLAB</span>
-          <span class="tag tag-warm">YALMIP</span>
-          <span class="tag tag-warm">CPLEX</span>
-          <span class="tag tag-blue">优化调度</span>
-          <span class="tag tag-green">双碳</span>
-          <span class="tag tag-warm">火电-储热耦合</span>
+          <span class="tag tag-warm">组织协调</span>
+          <span class="tag tag-green">资助育人</span>
+          <span class="tag tag-warm">团队管理</span>
         </div>
       </div>
+
       <div class="card">
         <div class="card-header">
-          <div class="card-icon">🏭</div>
+          <div class="card-icon">🎤</div>
           <div>
-            <div class="card-title">2026 西门子杯 · 中国智能制造挑战赛</div>
-            <div class="card-subtitle">智能产线数字孪生设计与开发（本科研究生组）</div>
+            <div class="card-title">2026 演讲比赛 — 总负责</div>
+            <div class="card-subtitle">2026 春</div>
           </div>
         </div>
         <div class="card-body">
-          <p><strong>负责方向：</strong>电控设计 — PLC 编程、控制逻辑、时序设计、I/O 点表、互锁与通讯</p>
-          <p><strong>目标节拍：</strong>≤ 45 秒/件</p>
-          <p>将电气工程专业知识应用于智能制造场景，打通从控制理论到工程落地的完整链路。</p>
+          <p>独立统筹"阳光资助·青春启航"主题演讲比赛初赛与决赛全流程：</p>
+          <p>从报名组织、选手沟通、PPT 整合、海报设计、物资采购，到现场主持、统分评审、应急预案——每一个环节都亲力亲为。这不仅是一次活动，更是一次全面的项目管理实战。</p>
+          <p>看到选手在台上发光，看到观众被故事打动，那种成就感告诉自己：一切付出都值得。</p>
         </div>
         <div class="tags">
-          <span class="tag tag-warm">TIA Portal V18</span>
-          <span class="tag tag-blue">PLC</span>
-          <span class="tag tag-green">数字孪生</span>
-          <span class="tag tag-warm">电控设计</span>
+          <span class="tag tag-warm">活动策划</span>
+          <span class="tag tag-green">全流程统筹</span>
+          <span class="tag tag-blue">项目管理</span>
+          <span class="tag tag-warm">演讲比赛</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin:2.2rem 0 1rem; color:var(--navy); font-size:1.05rem; font-weight: 600;">成长时间线</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">2026 春</div>
+        <div class="tl-title">2026 演讲比赛 — 总负责</div>
+        <div style="color:var(--text-muted);font-size:0.86rem;">初赛+决赛全流程统筹：报名组织、PPT 整合、海报物资、统分评审、现场主持</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025 秋</div>
+        <div class="tl-title">阳宣知识竞答 — 策划与执行</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025 秋</div>
+        <div class="tl-title">招新 &amp; 新生见面会 &amp; 秋季培训会</div>
+        <div style="color:var(--text-muted);font-size:0.86rem;">负责招新面试、策划新生见面会、组织秋季资助政策培训</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025 秋</div>
+        <div class="tl-title">绿色通道活动 — 组织负责</div>
+        <div style="color:var(--text-muted);font-size:0.86rem;">作为新任负责人，独立组织统筹绿色通道迎新，用亲身经历帮助经济困难新生</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025 夏</div>
+        <div class="tl-title">竞选成为阳宣负责人</div>
+        <div style="color:var(--text-muted);font-size:0.86rem;">系统总结工作成果，提出组织优化方案，完成竞选答辩，成功当选</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024 秋</div>
+        <div class="tl-title">加入阳光资助宣传员队伍</div>
+        <div style="color:var(--text-muted);font-size:0.86rem;">大一入学加入阳宣，从此与学生工作结缘</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Volunteer & Public Service -->
+<section id="volunteer" class="section reveal">
+  <div class="section-inner">
+    <p class="section-tag">Volunteer &amp; Public Service</p>
+    <h2 class="section-title">志愿服务与公益</h2>
+
+    <div class="growth-quote">从被帮助的人，到伸出手的人——这是一条走不完的路</div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🎗️</div>
+          <div>
+            <div class="card-title">阳光资助宣传员</div>
+            <div class="card-subtitle">作为从绿色通道走来的学子</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>自身受益于国家资助政策与浙江省珍珠生计划，从绿色通道走进大学校园，因而更懂得回馈的意义。</p>
+          <p>作为阳光资助宣传员，参与绿色通道迎新、助学政策宣讲、经济困难学生帮扶等工作。</p>
+          <p>用亲身经历告诉每一个从类似处境走来的学弟学妹：<strong>贫穷不是羞耻，它是一种可以被超越的现实。</strong></p>
+        </div>
+        <div class="tags">
+          <span class="tag tag-green">绿色通道</span>
+          <span class="tag tag-warm">资助育人</span>
+          <span class="tag tag-green">珍珠生</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📖</div>
+          <div>
+            <div class="card-title">支教与儿童守护</div>
+            <div class="card-subtitle">长期参与</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>参与支教志愿服务，加入"守护儿童"公益项目（乡村发展基金会 + 儿童少年基金会联合发起）。</p>
+          <p>在"志愿四川"平台持续累积服务时长。从短期支教到长期陪伴——公益不是一时热情，而是藤蔓一样缠绕在生命中的持续行动。</p>
+        </div>
+        <div class="tags">
+          <span class="tag tag-green">支教</span>
+          <span class="tag tag-warm">志愿四川</span>
+          <span class="tag tag-warm">守护儿童</span>
+          <span class="tag tag-green">志愿服务</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🌱</div>
+          <div>
+            <div class="card-title">云微扶智 · 云端支教</div>
+            <div class="card-subtitle">2025 — 至今</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>参与"云微扶智"项目，通过线上方式为偏远地区学生提供学业辅导与成长陪伴。在数字鸿沟的另一端，用知识与关怀搭建桥梁。</p>
+          <p>每周固定线上辅导，不仅仅是教知识，更是陪伴一个孩子的成长——在屏幕两端，彼此照亮。</p>
+        </div>
+        <div class="tags">
+          <span class="tag tag-blue">云支教</span>
+          <span class="tag tag-green">教育公益</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Social Practice & Service -->
-<section id="practice" class="section reveal">
+<!-- Social Practice -->
+<section id="practice" class="section section-alt reveal">
   <div class="section-inner">
-    <p class="section-tag">Practice &amp; Service</p>
-    <h2 class="section-title">社会实践与服务</h2>
+    <p class="section-tag">Social Practice</p>
+    <h2 class="section-title">社会实践</h2>
+
     <div class="cards">
       <div class="card">
         <div class="card-header">
@@ -499,92 +682,32 @@
         </div>
         <div class="card-body">
           <p>深入攀枝花基层，走进乌蒙山褶皱里的旧时光。在调研与走访中贴近真实的中国，理解发展中的不平衡与不充分。</p>
+          <p>这支实践队伍获得了中国网的报道——但比报道更重要的是，在乌蒙山区看到的每一张面孔、听到的每一个故事，都刻在了心里。</p>
+          <p>社会实践不是一次"出行"，而是一次觉醒。它让你知道，书本上的"发展"二字，是用多少人的汗水写成的。</p>
         </div>
         <div class="tags">
           <span class="tag tag-green">社会实践</span>
           <span class="tag tag-warm">中国网报道</span>
+          <span class="tag tag-blue">基层调研</span>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">📖</div>
-          <div>
-            <div class="card-title">支教与公益</div>
-            <div class="card-subtitle">长期参与</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <p>参与支教志愿服务，加入守护儿童公益项目（乡基会+儿基会）。相信公益不是一时的热情，而是藤蔓一样缠绕在生命中的持续行动。</p>
-        </div>
-        <div class="tags">
-          <span class="tag tag-green">支教</span>
-          <span class="tag tag-warm">志愿四川</span>
-          <span class="tag tag-warm">守护儿童</span>
-          <span class="tag tag-green">志愿服务</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">🎗️</div>
-          <div>
-            <div class="card-title">阳光资助宣传</div>
-            <div class="card-subtitle">作为从绿色通道走来的学子</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <p>自身受益于国家资助政策，因而更懂得回馈。作为阳光资助宣传员，参与绿色通道、助学政策宣讲等活动，用亲身经历帮助更多家庭经济困难学生。</p>
-        </div>
-        <div class="tags">
-          <span class="tag tag-green">绿色通道</span>
-          <span class="tag tag-warm">资助育人</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- Student Work -->
-<section id="work" class="section section-alt reveal">
-  <div class="section-inner">
-    <p class="section-tag">Student Work</p>
-    <h2 class="section-title">学生工作</h2>
-    <div class="cards">
       <div class="card">
         <div class="card-header">
-          <div class="card-icon">☀️</div>
+          <div class="card-icon">🏠</div>
           <div>
-            <div class="card-title">阳光资助宣传员（阳宣）核心骨干</div>
-            <div class="card-subtitle">2025 — 至今</div>
+            <div class="card-title">学子家乡行</div>
+            <div class="card-subtitle">2025 寒假</div>
           </div>
         </div>
         <div class="card-body">
-          <p>负责对接人资与二组，承担干部例会月度记录、薪酬评议与工资公示、建议反馈收集整理等日常职能。</p>
+          <p>回到家乡浙江，走访母校与社区，开展大学宣传与资助政策普及活动。用自己的大学故事，让更多学弟学妹看见可能性。</p>
+          <p>从"被招生"到"去招生"——身份的转换，也是一种成长。当你能用自己的经历去激励别人时，走过的路便有了新的意义。</p>
         </div>
         <div class="tags">
-          <span class="tag tag-warm">组织协调</span>
-          <span class="tag tag-green">宣传</span>
-          <span class="tag tag-warm">资助工作</span>
+          <span class="tag tag-green">招生宣传</span>
+          <span class="tag tag-warm">返乡实践</span>
         </div>
-      </div>
-    </div>
-    <h3 style="margin:2.2rem 0 1rem; color:var(--navy); font-size:1.05rem; font-weight: 600;">组织 / 参与活动</h3>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-date">2026 春</div>
-        <div class="tl-title">2026 演讲比赛 — 总负责</div>
-        <div style="color:var(--text-muted);font-size:0.86rem;">初赛+决赛全流程统筹：报名组织、PPT 整合、海报物资、统分评审</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">2025 秋</div>
-        <div class="tl-title">阳宣知识竞答</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">2025 秋</div>
-        <div class="tl-title">招新 &amp; 新生见面会 &amp; 秋季培训会</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">2025 夏</div>
-        <div class="tl-title">绿色通道活动 &amp; 毕业生欢送会</div>
       </div>
     </div>
   </div>
@@ -608,7 +731,10 @@
         </p>
         <p>
           好的爱情让人成长。学会沟通、学会包容、学会在忙碌中不忘牵挂。
-          感谢相遇，感谢陪伴。
+          爱不是占有，而是两个人各自努力，然后在对的方向上相遇。
+        </p>
+        <p>
+          感谢相遇，感谢陪伴。愿执子之手，与子偕老。
         </p>
       </div>
       <div style="text-align:center;">
@@ -631,6 +757,11 @@
         <p style="margin-top:0.8rem;color:var(--text-muted);font-size:0.84rem;">在一起 · 三周年</p>
       </div>
     </div>
+
+    <div class="highlight-box">
+      <p><strong>爱情教会我的事：</strong></p>
+      <p>异地的距离没有稀释感情，反而让每一次见面都珍贵。好的爱情不需要每天在一起，而是彼此信任，各自向上生长。她让我更清楚地看见自己——包括优点，也包括需要改进的地方。这大概就是爱情最好的样子：在爱一个人中，成为更好的自己。</p>
+    </div>
   </div>
 </section>
 
@@ -639,6 +770,9 @@
   <div class="section-inner">
     <p class="section-tag">Reflections</p>
     <h2 class="section-title">个人思考</h2>
+
+    <div class="growth-quote">真正影响一个人的，不是做了什么，而是想清楚了什么</div>
+
     <div class="cards">
       <div class="card">
         <div class="card-header">
@@ -649,6 +783,7 @@
         </div>
         <div class="card-body">
           <p>社会实践不仅是行走，更是凝视。在乌蒙山区的日子里，看到的是书本之外的中国——有困顿，有坚韧，有人在贫瘠的土地上用力生活。这段经历让我重新理解"发展"二字的分量。</p>
+          <p>当课本上的"不平衡不充分"变成眼前具体的人和事，你没办法再做一个冷漠的旁观者。</p>
         </div>
       </div>
       <div class="card">
@@ -660,6 +795,7 @@
         </div>
         <div class="card-body">
           <p>我自己从绿色通道走来，深知经济困难对学生意味着什么——不仅是物质上的困窘，更是一种无形的心理负担。正因如此，我在阳光资助的工作不是"帮助别人"，而是"与曾经的自己对话"。</p>
+          <p>贫穷教会我的不是自卑，而是同理心——你能真正理解别人的难处，因为你走过同样的路。</p>
         </div>
       </div>
       <div class="card">
@@ -671,6 +807,7 @@
         </div>
         <div class="card-body">
           <p>公益不应是大学生活中的一次"打卡"，而应像藤蔓一样，缠绕在生命的每一个阶段。从支教到志愿服务，从绿色通道到守护儿童——做一分，便有一分的意义。</p>
+          <p>有人问我为什么这么忙还坚持做公益。答案很简单：因为我相信，一个人的价值，不在于他得到了多少，而在于他给出去多少。</p>
         </div>
       </div>
       <div class="card">
@@ -681,7 +818,58 @@
           </div>
         </div>
         <div class="card-body">
-          <p>十九岁，站在成人世界的门槛上。科研、竞赛、学生工作、恋爱——每一条线都在抽枝长叶。偶尔焦虑，偶尔迷茫，但更多时候，是在行动中找到答案。愿不负时光，不负遇见。</p>
+          <p>十九岁，站在成人世界的门槛上。学生工作、志愿服务、社会实践、恋爱——每一条线都在抽枝长叶。偶尔焦虑，偶尔迷茫，但更多时候，是在行动中找到答案。</p>
+          <p>不追求成为别人眼中的"优秀"，只愿做一个有温度的人。愿不负时光，不负遇见。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Research & Competition (reduced) -->
+<section id="research" class="section reveal">
+  <div class="section-inner">
+    <p class="section-tag">Research &amp; Competition</p>
+    <h2 class="section-title">科研与竞赛</h2>
+
+    <p style="color:var(--text-muted);font-size:0.92rem;margin-bottom:1.8rem;">
+      科研与竞赛是专业成长的训练场。以下为正在进行中的主要项目简介。
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🔥</div>
+          <div>
+            <div class="card-title">2025 大学生创新训练计划</div>
+            <div class="card-subtitle">2025.11 — 至今 · "双碳"目标下火电-熔盐储热耦合优化调度</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>聚焦火电-熔盐储热耦合系统的灵活性提升与碳经济性优化，使用 MATLAB + YALMIP + CPLEX 建模求解。在此过程中，系统训练了数学建模、线性化处理与多目标优化能力。</p>
+        </div>
+        <div class="tags">
+          <span class="tag tag-warm">MATLAB</span>
+          <span class="tag tag-warm">CPLEX</span>
+          <span class="tag tag-blue">优化调度</span>
+          <span class="tag tag-green">双碳</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🏭</div>
+          <div>
+            <div class="card-title">2026 西门子杯 · 智能制造挑战赛</div>
+            <div class="card-subtitle">智能产线数字孪生设计与开发 — 电控方向</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>负责 PLC 电控设计，使用 TIA Portal V18 完成控制逻辑、时序设计与 I/O 点表，目标节拍 ≤ 45 秒/件。将电气工程专业知识应用于智能制造场景。</p>
+        </div>
+        <div class="tags">
+          <span class="tag tag-warm">TIA Portal V18</span>
+          <span class="tag tag-blue">PLC</span>
+          <span class="tag tag-green">电控设计</span>
         </div>
       </div>
     </div>
@@ -689,11 +877,23 @@
 </section>
 
 <!-- Traits -->
-<section id="traits" class="section reveal">
+<section id="traits" class="section section-alt reveal">
   <div class="section-inner">
     <p class="section-tag">Traits</p>
-    <h2 class="section-title">个人特质</h2>
+    <h2 class="section-title">成长底色</h2>
     <div class="traits">
+      <div class="trait">
+        <span class="trait-icon">🤝</span>
+        <span class="trait-label">服务意识</span>
+      </div>
+      <div class="trait">
+        <span class="trait-icon">🔥</span>
+        <span class="trait-label">执行力强</span>
+      </div>
+      <div class="trait">
+        <span class="trait-icon">💡</span>
+        <span class="trait-label">善于反思</span>
+      </div>
       <div class="trait">
         <span class="trait-icon">🎯</span>
         <span class="trait-label">高度自律</span>
@@ -703,20 +903,8 @@
         <span class="trait-label">多线并行</span>
       </div>
       <div class="trait">
-        <span class="trait-icon">📝</span>
-        <span class="trait-label">严谨细致</span>
-      </div>
-      <div class="trait">
-        <span class="trait-icon">🤝</span>
-        <span class="trait-label">公益情怀</span>
-      </div>
-      <div class="trait">
-        <span class="trait-icon">🔥</span>
-        <span class="trait-label">执行力强</span>
-      </div>
-      <div class="trait">
-        <span class="trait-icon">💡</span>
-        <span class="trait-label">善于总结</span>
+        <span class="trait-icon">❤️</span>
+        <span class="trait-label">有温度</span>
       </div>
     </div>
   </div>
@@ -724,7 +912,7 @@
 
 <!-- Footer -->
 <footer class="footer">
-  <p>李忠翔 &copy; 2025 — 2026 &nbsp;|&nbsp; 四川大学电气工程学院 &nbsp;|&nbsp; <strong>脚踏实地，仰望星空</strong></p>
+  <p>李忠翔 &copy; 2025 — 2026 &nbsp;|&nbsp; 四川大学电气工程学院 &nbsp;|&nbsp; <strong>在行动中成长，在服务中扎根</strong></p>
   <p>Li Zhongxiang · College of Electrical Engineering, Sichuan University</p>
 </footer>
 
@@ -770,6 +958,165 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
 revealEls.forEach(el => observer.observe(el));
+
+// ===== Editor =====
+(function() {
+  const STORAGE_KEY = 'lzx_page_edits';
+  let editMode = false;
+
+  // Build toolbar
+  const toolbar = document.createElement('div');
+  toolbar.className = 'editor-toolbar';
+  toolbar.innerHTML = `
+    <div class="editor-toast" id="editorToast"></div>
+    <div class="editor-panel" id="editorPanel">
+      <button class="editor-btn-save" id="btnSave">保存修改</button>
+      <button class="editor-btn-export" id="btnExport">导出 HTML</button>
+      <button class="editor-btn-reset" id="btnReset">恢复默认</button>
+    </div>
+    <button class="editor-toggle" id="btnEdit" title="编辑模式">&#9998;</button>
+  `;
+  document.body.appendChild(toolbar);
+
+  const btnEdit = document.getElementById('btnEdit');
+  const panel = document.getElementById('editorPanel');
+  const toast = document.getElementById('editorToast');
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  // Selectors for editable text elements
+  const editableSelectors = [
+    '.section-title', '.section-tag', '.card-title', '.card-subtitle',
+    '.card-body p', '.about-text p', '.tagline', '.hero h1', '.en-name',
+    '.tl-title', '.tl-date', '.tl-item div[style]',
+    '.trait-label', '.highlight-box p', '.growth-quote',
+    '.hero-badge', '.info-value', '.info-label',
+    'footer p', 'footer strong'
+  ];
+
+  function getEditKey(el) {
+    // Build a unique key from section id + tag + index
+    const section = el.closest('section');
+    const sectionId = section ? section.id : 'global';
+    const tag = el.tagName.toLowerCase();
+    const cls = el.className && typeof el.className === 'string' ? el.className.split(' ')[0] : '';
+    const siblings = el.parentNode ? Array.from(el.parentNode.children).filter(c => c.tagName === el.tagName) : [];
+    const idx = siblings.indexOf(el);
+    return `${sectionId}/${tag}.${cls}[${idx}]`;
+  }
+
+  function enterEditMode() {
+    const pw = prompt('请输入管理员密码：');
+    if (pw !== 'lzx123') {
+      if (pw !== null) showToast('密码错误');
+      return;
+    }
+    editMode = true;
+    btnEdit.classList.add('active');
+    btnEdit.innerHTML = '&#10005;';
+    panel.classList.add('show');
+
+    editableSelectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+        el.dataset.editKey = getEditKey(el);
+      });
+    });
+    showToast('编辑模式已开启，点击文字即可修改');
+  }
+
+  function exitEditMode(save) {
+    if (save) saveAll();
+    editMode = false;
+    btnEdit.classList.remove('active');
+    btnEdit.innerHTML = '&#9998;';
+    panel.classList.remove('show');
+
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      el.removeAttribute('contenteditable');
+    });
+  }
+
+  function saveAll() {
+    const edits = {};
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      edits[el.dataset.editKey] = el.innerHTML;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(edits));
+    showToast('已保存到本地');
+  }
+
+  function loadAll() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    let edits;
+    try { edits = JSON.parse(raw); } catch(e) { return; }
+
+    // On first load, apply saved edits to matching elements
+    editableSelectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        const key = getEditKey(el);
+        if (edits[key] !== undefined) {
+          el.innerHTML = edits[key];
+        }
+      });
+    });
+  }
+
+  function resetAll() {
+    if (confirm('确定要恢复所有文字为默认内容吗？此操作不可撤销。')) {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+  }
+
+  function exportHTML() {
+    // Remove editor artifacts and download
+    const clone = document.documentElement.cloneNode(true);
+    // Remove editor toolbar
+    const tb = clone.querySelector('.editor-toolbar');
+    if (tb) tb.remove();
+    // Remove contenteditable attrs
+    clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    // Remove editKey dataset
+    clone.querySelectorAll('[data-edit-key]').forEach(el => delete el.dataset.editKey);
+
+    const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    const blob = new Blob([html], { type: 'text/html;charset=UTF-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'index.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('HTML 文件已下载');
+  }
+
+  btnEdit.addEventListener('click', () => {
+    if (editMode) {
+      exitEditMode(true);
+    } else {
+      enterEditMode();
+    }
+  });
+
+  document.getElementById('btnSave').addEventListener('click', () => saveAll());
+  document.getElementById('btnExport').addEventListener('click', () => exportHTML());
+  document.getElementById('btnReset').addEventListener('click', () => resetAll());
+
+  // Auto-save on blur
+  document.addEventListener('blur', e => {
+    if (editMode && e.target.hasAttribute('contenteditable')) {
+      saveAll();
+    }
+  }, true);
+
+  // Load saved content on page load
+  loadAll();
+})();
 </script>
 
 </body>
